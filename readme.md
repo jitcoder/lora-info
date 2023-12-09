@@ -2,7 +2,10 @@
 
 Shows Lora Base Model, Trigger Words and Examples
 
-Special thanks to `badjeff` for doing all the actual hard work (https://github.com/badjeff/comfyui_lora_tag_loader)
+Special thanks to:
+
+- `badjeff` for doing all the actual hard work (https://github.com/badjeff/comfyui_lora_tag_loader)
+- `alessandroperilli` for all the feedback.
 
 ![image](preview.png)
 
