@@ -67,27 +67,30 @@ class LoraInfo:
             lora_path = folder_paths.get_full_path("loras", lora_name)
             LORAsha256 = calculate_sha256(lora_path)
             model_info = get_model_version_info(LORAsha256)
-            trainedWords = model_info.get("trainedWords")
-            baseModel = model_info.get("baseModel")
-            images = model_info.get('images')
+            if model_info:
+                trainedWords = model_info.get("trainedWords")
+                baseModel = model_info.get("baseModel")
+                images = model_info.get('images')
 
-            if trainedWords:
-                output += "Triggers: " + ",".join(trainedWords)
-                output += "\n"
-            
-            if baseModel:
-                output += f"Base Model: {baseModel}\n"
-            if images:
-                output += "\nExamples:\n"
-                for image in images:
-                    output += f"\nOutput: {image.get('url')}\n"
-                    meta = image.get("meta")
-                    if meta:
-                        for key, value in meta.items():
-                            output += f"{key}: {value}\n"
-                    output += '\n'
-            lora_tags[lora_name] = output
-            save_dict_to_json(lora_tags, './custom_nodes/lora-info/db.json')
+                if trainedWords:
+                    output += "Triggers: " + ",".join(trainedWords)
+                    output += "\n"
+                
+                if baseModel:
+                    output += f"Base Model: {baseModel}\n"
+                if images:
+                    output += "\nExamples:\n"
+                    for image in images:
+                        output += f"\nOutput: {image.get('url')}\n"
+                        meta = image.get("meta")
+                        if meta:
+                            for key, value in meta.items():
+                                output += f"{key}: {value}\n"
+                        output += '\n'
+                lora_tags[lora_name] = output
+                save_dict_to_json(lora_tags, './custom_nodes/lora-info/db.json')
+            else:
+                output = "LoRA model not found on CivitAI"
         return {"ui": {"text": (output,)}}
 
 
