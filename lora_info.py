@@ -61,8 +61,11 @@ def get_lora_info(lora_name):
         lora_path = folder_paths.get_full_path("loras", lora_name)
         LORAsha256 = calculate_sha256(lora_path)
         model_info = get_model_version_info(LORAsha256)
-        trainedWords = ",".join(model_info.get("trainedWords"))
-        baseModel = model_info.get("baseModel")
+        if model_info.get("trainedWords", None) is None:
+            trainedWords = ""
+        else:
+            trainedWords = ",".join(model_info.get("trainedWords"))
+        baseModel = model_info.get("baseModel", "")
         images = model_info.get('images')
         examplePrompt = None
 
