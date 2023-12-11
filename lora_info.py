@@ -2,6 +2,9 @@ import folder_paths
 import hashlib
 import requests
 import json
+import server
+from server import PromptServer
+from aiohttp import web
 
 def load_json_from_file(file_path):
     try:
@@ -98,6 +101,17 @@ def get_lora_info(lora_name):
     return (output, trainedWords, examplePrompt, baseModel)
 
 LORA_LIST = sorted(folder_paths.get_filename_list("loras"), key=str.lower)
+
+@server.PromptServer.instance.routes.post('/lora_info')
+async def fetch_lora_info(request):
+    post = await request.post()
+    lora_name = post.get("lora_name")
+    (output, triggerWords, examplePrompt, baseModel) = get_lora_info(lora_name)
+
+    return web.json_response({"output": output, "triggerWords": triggerWords, "examplePrompt": examplePrompt, "baseModel": baseModel})
+
+dictionary_of_stuff = {"something":"A text message"}
+PromptServer.instance.send_sync("my-message-handle", dictionary_of_stuff)
 
 class LoraInfo:
     def __init__(self):
