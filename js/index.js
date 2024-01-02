@@ -24,11 +24,16 @@ app.registerExtension({
 
         Object.defineProperty(loraNameWidget, 'value', {
           get() {
-            const ret = originalDescriptor.get.call(loraNameWidget);
+            const ret = originalDescriptor.get?.call(loraNameWidget) || originalDescriptor.value || '';
             return ret
           },
           set(value) {
-            originalDescriptor.set.call(loraNameWidget, value);
+            if (originalDescriptor.set) {
+              originalDescriptor.set.call(loraNameWidget, value);
+            } else {
+              originalDescriptor.value = value;
+            }
+            
             const body = new FormData();
             body.append('lora_name',value);
             api

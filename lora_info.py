@@ -5,6 +5,9 @@ import json
 import server
 from server import PromptServer
 from aiohttp import web
+import os
+
+db_path = os.path.join(os.path.curdir, 'custom_nodes', 'lora-info', 'db.json')
 
 def load_json_from_file(file_path):
     try:
@@ -43,7 +46,7 @@ def calculate_sha256(file_path):
     return sha256_hash.hexdigest()
 
 def get_lora_info(lora_name):
-    db = load_json_from_file('./custom_nodes/lora-info/db.json')
+    db = load_json_from_file(db_path)
     output = None
     examplePrompt = None
     trainedWords = None
@@ -96,7 +99,7 @@ def get_lora_info(lora_name):
             "examplePrompt": examplePrompt,
             "baseModel": baseModel
             }
-        save_dict_to_json(db, './custom_nodes/lora-info/db.json')
+        save_dict_to_json(db, db_path)
     
     return (output, trainedWords, examplePrompt, baseModel)
 
