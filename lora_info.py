@@ -7,7 +7,8 @@ from server import PromptServer
 from aiohttp import web
 import os
 
-db_path = os.path.abspath(os.path.join(os.path.curdir, 'custom_nodes', 'lora-info', 'db.json'))
+
+db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'db.json')
 
 def load_json_from_file(file_path):
     try:
