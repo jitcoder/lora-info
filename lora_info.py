@@ -3,7 +3,6 @@ import hashlib
 import requests
 import json
 import server
-from server import PromptServer
 from aiohttp import web
 import os
 
@@ -114,9 +113,6 @@ async def fetch_lora_info(request):
 
     return web.json_response({"output": output, "triggerWords": triggerWords, "examplePrompt": examplePrompt, "baseModel": baseModel})
 
-dictionary_of_stuff = {"something":"A text message"}
-PromptServer.instance.send_sync("my-message-handle", dictionary_of_stuff)
-
 class LoraInfo:
     def __init__(self):
         pass
@@ -139,15 +135,4 @@ class LoraInfo:
         (output, triggerWords, examplePrompt, baseModel) = get_lora_info(lora_name)
         return {"ui": {"text": (output,), "model": (baseModel,)}, "result": (triggerWords, examplePrompt)}
 
-# A dictionary that contains all nodes you want to export with their names
-# NOTE: names should be globally unique
-NODE_CLASS_MAPPINGS = {
-    "LoraInfo": LoraInfo,
-}
 
-# A dictionary that contains the friendly/humanly readable titles for the nodes
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "LoraInfo": "Lora Info",
-}
-
-WEB_DIRECTORY = "./js"

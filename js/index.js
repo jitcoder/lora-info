@@ -56,3 +56,42 @@ app.registerExtension({
     }
   },
 });
+
+
+app.registerExtension({
+  name: "ImageFromURL",
+  async beforeRegisterNodeDef(nodeType, nodeData, app) {
+    if (nodeData.name === "ImageFromURL") {
+
+      const onNodeCreated = nodeType.prototype.onNodeCreated;
+      nodeType.prototype.onNodeCreated = function () {
+        onNodeCreated ? onNodeCreated.apply(this, []) : undefined;
+
+        const [urlWidget] = this.widgets;
+        let originalDescriptor = Object.getOwnPropertyDescriptor(urlWidget, 'value');
+
+        Object.defineProperty(urlWidget, 'value', {
+          get() {
+            const ret = originalDescriptor.get?.call(urlWidget) || originalDescriptor.value || '';
+            return ret
+          },
+          set(value) {
+            if (originalDescriptor.set) {
+              originalDescriptor.set.call(urlWidget, value);
+            } else {
+              originalDescriptor.value = value;
+            }
+            
+            const body = new FormData();
+            body.append('url',value);
+            api
+              .fetchApi("/fetch_image", { method: "POST", body, })
+              .then((resp) => {
+
+              })
+          }
+        });
+      }
+    }
+  },
+});
